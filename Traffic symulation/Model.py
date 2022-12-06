@@ -8,33 +8,48 @@ import Car
 FREE_LANE = 201
 MAX_SPEED = 4
 
+BLOCK_SIZE = 7
+BIGG_BLOCK = BLOCK_SIZE + 1
+
 white = (255, 255, 255)
 black = (0, 0, 0)
 blue = (0, 0, 255)
 red = (255, 0, 0)
+grey = (80, 80, 80)
 
+height = [204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 203, 203, 202, 202, 201, 201, 200, 200,
+        199, 199, 198, 198, 197, 197, 196, 196, 196, 195, 195, 195, 194, 194, 194, 193, 193, 193, 192, 192,
+        192, 192, 192, 192, 192, 191, 191, 191, 191, 191, 191, 190, 190, 190, 190, 190, 190, 189, 189, 189,
+        189, 189, 189, 188, 188, 188, 188, 188, 190, 192, 194, 196, 198, 201, 204, 206, 209, 211, 213, 216,
+        218, 221, 223, 225, 228, 231, 234, 236, 239, 242, 245, 247, 249, 252, 255, 257, 260, 263, 265, 268,
+        270, 272, 274, 275, 275, 274, 274, 274, 273, 273, 271, 269, 267, 265, 263, 261, 259, 256, 254, 252,
+        249, 247, 244, 242, 239, 236, 233, 230, 227, 224, 221, 219, 217, 216, 214, 213, 211, 210, 211, 212,
+        212, 213, 215, 216, 218, 219, 220, 221, 222, 223, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232,
+        233, 234, 235, 236, 237, 238, 239, 240, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253,
+        255, 256, 257, 258, 259, 260, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 274, 275, 276
+]
 
 def draw_grid(screen, width):
-    pygame.draw.line(screen, white, (0, 500), (width, 500), 1)
-    pygame.draw.line(screen, white, (0, 510), (width, 510), 1)
-    pygame.draw.line(screen, white, (0, 490), (width, 490), 1)
+    pygame.draw.line(screen, white, (0, 300), (width, 300), 1)
+    pygame.draw.line(screen, white, (0, 310), (width, 310), 1)
+    pygame.draw.line(screen, white, (0, 290), (width, 290), 1)
 
     for i in range(1, 200):
-        pygame.draw.line(screen, white, (i * 10, 490), (i * 10, 510), 1)
+        pygame.draw.line(screen, white, (i * BIGG_BLOCK, 290), (i * BIGG_BLOCK, 310), 1)
 
 
 def draw(board, screen):
     for j in range(board.shape[1]):
         for i in range(board.shape[0]):
             if board[i][j] == 0 and j == 1:
-                pygame.draw.rect(screen, black, (i * 10 + 1, 501, 9, 9))
+                pygame.draw.rect(screen, grey, (i * BIGG_BLOCK + 80, height[i], BLOCK_SIZE, BLOCK_SIZE)) # bottom line
                 continue
             elif j == 1:
-                pygame.draw.rect(screen, blue, (i * 10 + 1, 501, 9, 9))
+                pygame.draw.rect(screen, blue, (i * BIGG_BLOCK + 1, 301, BLOCK_SIZE, BLOCK_SIZE)) # cars at bottom
             elif board[i][j] == 0 and j == 0:
-                pygame.draw.rect(screen, black, (i * 10 + 1, 491, 9, 9))
+                pygame.draw.rect(screen, grey, (i * BIGG_BLOCK + 80, height[i] - BIGG_BLOCK, BLOCK_SIZE, BLOCK_SIZE)) # upper line
             elif j == 0:
-                pygame.draw.rect(screen, blue, (i * 10 + 1, 491, 9, 9))
+                pygame.draw.rect(screen, blue, (i * BIGG_BLOCK + 1, 291, BLOCK_SIZE, BLOCK_SIZE)) # cars at upper
 
 
 def find_free_id(board):
@@ -52,13 +67,13 @@ def add_random_car(board, cars, screen):
         id = find_free_id(board)
         cars.append(Car.Car(1, id))
         board[0][1] = id
-        pygame.draw.rect(screen, blue, (0 * 10 + 1, 501, 9, 9))
+        pygame.draw.rect(screen, blue, (0 * BIGG_BLOCK + 1, 301, BLOCK_SIZE, BLOCK_SIZE))
 
     if p[1] > 0.5 and board[199][0] == 0:
         id = find_free_id(board)
         cars.append(Car.Car(1, id))
         board[199][0] = id
-        pygame.draw.rect(screen, blue, (199 * 10 + 1, 491, 9, 9))
+        pygame.draw.rect(screen, blue, (199 * BIGG_BLOCK + 1, 291, BLOCK_SIZE, BLOCK_SIZE))
 
 
 def find_car(id, cars):
