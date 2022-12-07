@@ -56,7 +56,7 @@ prevTime2 = time.perf_counter()
 prevTime3 = time.perf_counter()
 
 #przechowuje położenia samochów w czasie t, gdzie wartość > 0 oznacza id samochodu znajdujcy się na danym polu, 0 - brak samochodu
-board = np.zeros((200, 4))
+board = np.zeros((200, 3))
 
 for i in range(21):
     board[i][2] = 1001
@@ -72,12 +72,6 @@ for i in range(160, 165):
 
 for i in range(190, 200):
     board[i][2] = 1001
-
-for i in range(23):
-    board[i][3] = 1002
-
-for i in range(25, 200):
-    board[i][3] = 1002
 
 cars = []
 

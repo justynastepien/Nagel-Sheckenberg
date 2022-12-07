@@ -23,7 +23,6 @@ def draw_grid(screen, width):
     pygame.draw.line(screen, white, (0, 510), (width, 510), 1)
     pygame.draw.line(screen, white, (0, 490), (width, 490), 1)
     pygame.draw.line(screen, white, (0, 520), (width, 520), 1)
-    pygame.draw.line(screen, white, (0, 530), (width, 530), 1)
 
     for i in range(1, 200):
         pygame.draw.line(screen, white, (i * 10, 490), (i * 10, 520), 1)
@@ -88,11 +87,6 @@ def draw(board, screen, width):
                     to_skip = board[i][j]
                     continue
                 pygame.draw.rect(screen, blue, (i * 10 + 1, 511, 9, 9))
-            elif j == 3:
-                if i + 1 < 200 and board[i][j] == board[i + 1][j] and board[i][j] != 0:
-                    pygame.draw.rect(screen, red, (i * 10 + 1, 521, 18, 9))
-                    to_skip = board[i][j]
-                    continue
 
 
 
@@ -209,7 +203,7 @@ def f_acceleration(velocity):
 
 def process(board, cars):
 
-    new_board = np.zeros((200, 4))
+    new_board = np.zeros((200, 3))
     cars_to_rmv = []
     to_skip = -1
     stop = False
