@@ -1,4 +1,7 @@
+import sys
+
 import pygame
+from pygame.locals import *
 from datetime import datetime
 import time
 import numpy as np
@@ -80,6 +83,7 @@ Model.draw_grid(screen, width)
 pygame.display.flip()
 start = time.time()
 
+
 while running:
     board, cars = Model.process(board, cars)
     board, cars = Model.add_random_car(board, cars, screen)
@@ -112,4 +116,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-
+        if event.type == KEYDOWN and event.key == K_SPACE:
+            pygame.event.clear()
+            while True:
+                event = pygame.event.wait()
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == KEYDOWN:
+                    if event.key == K_SPACE:
+                        break
+                    if event.key == K_RIGHT:
+                        newevent = pygame.event.Event(pygame.locals.KEYDOWN, unicode="", key=K_SPACE,
+                                                      mod=pygame.locals.KMOD_NONE)
+                        pygame.event.post(newevent)
+                        break
