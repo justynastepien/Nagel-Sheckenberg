@@ -45,9 +45,11 @@ black = (0, 0, 0)
 red = (255, 0, 0)
 blue = (0, 255, 0)
 
-(width, height) = (1900, 1000)
+(width, height) = (1800, 600)
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Nagel-Schreckenberg Simulation")
+bg_img = pygame.image.load('agh.png')
+bg_img = pygame.transform.scale(bg_img,(1950,650))
 updateTime = 0.5
 
 running = True
@@ -81,6 +83,7 @@ pygame.display.flip()
 start = time.time()
 
 while running:
+    screen.blit(bg_img,(-100,0))
     board, cars = Model.process(board, cars)
     board, cars = Model.add_random_car(board, cars, screen)
     if light1 and board[81][0] == 0:

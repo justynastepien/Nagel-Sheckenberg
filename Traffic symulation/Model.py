@@ -6,6 +6,9 @@ import Car
 import Bus
 
 
+START = 80
+BLOCK_SIZE = 7
+BLOCK_W_SPACE = BLOCK_SIZE+1
 FREE_LANE = 201
 MAX_SPEED = 4
 
@@ -17,15 +20,31 @@ blue = (0, 0, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
 
+height = [204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 203, 203, 202, 202, 201, 201, 200, 200,
+        199, 199, 198, 198, 197, 197, 196, 196, 196, 195, 195, 195, 194, 194, 194, 193, 193, 193, 192, 192,
+        192, 192, 192, 192, 192, 191, 191, 191, 191, 191, 191, 190, 190, 190, 190, 190, 190, 189, 189, 189,
+        189, 189, 189, 188, 188, 188, 188, 188, 190, 192, 194, 196, 198, 201, 204, 206, 209, 211, 213, 216,
+        218, 221, 223, 225, 228, 231, 234, 236, 239, 242, 245, 247, 249, 252, 255, 257, 260, 263, 265, 268,
+        270, 272, 274, 275, 275, 274, 274, 274, 273, 273, 271, 269, 267, 265, 263, 261, 259, 256, 254, 252,
+        249, 247, 244, 242, 239, 236, 233, 230, 227, 224, 221, 219, 217, 216, 214, 213, 211, 210, 211, 212,
+        212, 213, 215, 216, 218, 219, 220, 221, 222, 223, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232,
+        233, 234, 235, 236, 237, 238, 239, 240, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253,
+        255, 256, 257, 258, 259, 260, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 274, 275, 276
+]
 
 def draw_grid(screen, width):
-    pygame.draw.line(screen, white, (0, 500), (width, 500), 1)
-    pygame.draw.line(screen, white, (0, 510), (width, 510), 1)
-    pygame.draw.line(screen, white, (0, 490), (width, 490), 1)
-    pygame.draw.line(screen, white, (0, 520), (width, 520), 1)
 
     for i in range(1, 200):
-        pygame.draw.line(screen, white, (i * 10, 490), (i * 10, 520), 1)
+        # vertical
+        pygame.draw.line(screen, white, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE), (i * BLOCK_W_SPACE + START, height[i]+20), 1)
+
+        # horizontal
+        k = width/200
+        # add  + START
+        # pygame.draw.line(screen, white, (k*i, height[i-1]), (k*(i+1), height[i]), 1)
+        # pygame.draw.line(screen, white, (k*i, height[i-1]+BLOCK_W_SPACE), (k*(i+1), height[i]+BLOCK_W_SPACE), 1)
+        # pygame.draw.line(screen, white, (k*i, height[i-1]-BLOCK_W_SPACE), (k*(i+1), height[i]-BLOCK_W_SPACE), 1)
+        # pygame.draw.line(screen, white, (k*i, height[i-1]+20), (k*(i+1), height[i]+20), 1)
 
 
 def draw(board, screen, width):
@@ -37,56 +56,56 @@ def draw(board, screen, width):
                 continue
 
             if board[i][j] == 1001:
-                pygame.draw.rect(screen, white, (i * 10 + 1, 511, 9, 9))
+                pygame.draw.rect(screen, white, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 continue
             if board[i][j] == 1002:
-                pygame.draw.rect(screen, white, (i * 10 + 1, 521, 9, 9))
+                pygame.draw.rect(screen, white, (i * BLOCK_W_SPACE + START, height[i]+20, BLOCK_SIZE, BLOCK_SIZE))
                 continue
 
 
             if board[i][j] == 1000:
                 if j == 1 and i == 81:
-                    pygame.draw.rect(screen, green, (81 * 10 + 1, 501, 9, 9))
+                    pygame.draw.rect(screen, green, (81 * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
                 elif j == 0 and i == 81:
-                    pygame.draw.rect(screen, green, (81 * 10 + 1, 491, 9, 9))
+                    pygame.draw.rect(screen, green, (81 * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 elif j == 1 and i == 134:
-                    pygame.draw.rect(screen, green, (134 * 10 + 1, 501, 9, 9))
+                    pygame.draw.rect(screen, green, (134 * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
                 elif j == 0 and i == 134:
-                    pygame.draw.rect(screen, green, (134 * 10 + 1, 491, 9, 9))
+                    pygame.draw.rect(screen, green, (134 * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 elif j == 2 and i == 134:
-                    pygame.draw.rect(screen, green, (134 * 10 + 1, 511, 9, 9))
+                    pygame.draw.rect(screen, green, (134 * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 elif j == 1 and i == 198:
-                    pygame.draw.rect(screen, green, (134 * 10 + 1, 501, 9, 9))
+                    pygame.draw.rect(screen, green, (134 * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
                 elif j == 2 and i == 198:
-                    pygame.draw.rect(screen, green, (134 * 10 + 1, 511, 9, 9))
+                    pygame.draw.rect(screen, green, (134 * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 continue
 
             if board[i][j] == 0 and j == 1:
-                pygame.draw.rect(screen, black, (i * 10 + 1, 501, 9, 9))
+                pygame.draw.rect(screen, black, (i * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
                 continue
             elif j == 1:
                 if i + 1 < 200 and board[i][j] == board[i + 1][j]:
-                    pygame.draw.rect(screen, red, (i * 10 + 1, 501, 18, 9))
+                    pygame.draw.rect(screen, red, (i * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE*2, BLOCK_SIZE))
                     to_skip = board[i][j]
                     continue
-                pygame.draw.rect(screen, blue, (i * 10 + 1, 501, 9, 9))
+                pygame.draw.rect(screen, blue, (i * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
             elif board[i][j] == 0 and j == 0:
-                pygame.draw.rect(screen, black, (i * 10 + 1, 491, 9, 9))
+                pygame.draw.rect(screen, black, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
             elif j == 0:
                 if i + 1 < 200 and board[i][j] == board[i + 1][j]:
-                    pygame.draw.rect(screen, red, (i * 10 + 1, 491, 18, 9))
+                    pygame.draw.rect(screen, red, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE*2, BLOCK_SIZE))
                     to_skip = board[i][j]
                     continue
-                pygame.draw.rect(screen, blue, (i * 10 + 1, 491, 9, 9))
+                pygame.draw.rect(screen, blue, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
             elif board[i][j] == 0 and j == 2:
-                pygame.draw.rect(screen, black, (i * 10 + 1, 511, 9, 9))
+                pygame.draw.rect(screen, black, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 continue
             elif j == 2:
                 if i + 1 < 200 and board[i][j] == board[i + 1][j]:
-                    pygame.draw.rect(screen, red, (i * 10 + 1, 511, 18, 9))
+                    pygame.draw.rect(screen, red, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE*2, BLOCK_SIZE))
                     to_skip = board[i][j]
                     continue
-                pygame.draw.rect(screen, blue, (i * 10 + 1, 511, 9, 9))
+                pygame.draw.rect(screen, blue, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
 
 
 
@@ -110,14 +129,14 @@ def add_random_car(board, cars, screen):
             board[0][1] = bus_id
             board[1][1] = bus_id
             #print('bus')
-            pygame.draw.rect(screen, red, (0 * 10 + 1, 501, 18, 9))
+            pygame.draw.rect(screen, red, (0 * BLOCK_W_SPACE + START, height[0], BLOCK_SIZE*2, BLOCK_SIZE))
             flag1 = 1
         if flag1 == 0:
             car_id = find_free_id(board)
             cars.append(Car.Car(1, car_id, 'car'))
             board[0][1] = car_id
             #print('car')
-            pygame.draw.rect(screen, blue, (0 * 10 + 1, 501, 9, 9))
+            pygame.draw.rect(screen, blue, (0 * BLOCK_W_SPACE + START, height[0], BLOCK_SIZE, BLOCK_SIZE))
 
     if p[1] > 0.1 and board[199][0] == 0:
         if board[198][0] == 0 and p[3] < 0.6:
@@ -125,13 +144,13 @@ def add_random_car(board, cars, screen):
             cars.append(Bus.Bus(1, bus_id, 'bus'))
             board[199][0] = bus_id
             board[198][0] = bus_id
-            pygame.draw.rect(screen, red, (198 * 10 + 1, 491, 18, 9))
+            pygame.draw.rect(screen, red, (198 * BLOCK_W_SPACE + START, height[198]-BLOCK_W_SPACE, BLOCK_SIZE*2, BLOCK_SIZE))
             flag2 = 1
         if flag2 == 0:
             car_id = find_free_id(board)
             cars.append(Car.Car(1, car_id, 'car'))
             board[199][0] = car_id
-            pygame.draw.rect(screen, blue, (199 * 10 + 1, 491, 9, 9))
+            pygame.draw.rect(screen, blue, (199 * BLOCK_W_SPACE + START, height[199]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
     return board, cars
 
 def find_car(id, cars):
