@@ -19,6 +19,7 @@ black = (0, 0, 0)
 blue = (0, 0, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
+grey = (80, 80, 80)
 
 height = [204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 203, 203, 202, 202, 201, 201, 200, 200,
         199, 199, 198, 198, 197, 197, 196, 196, 196, 195, 195, 195, 194, 194, 194, 193, 193, 193, 192, 192,
@@ -33,7 +34,6 @@ height = [204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 204, 203, 203, 
 ]
 
 def draw_grid(screen, width):
-
     for i in range(1, 200):
         # vertical
         pygame.draw.line(screen, white, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE), (i * BLOCK_W_SPACE + START, height[i]+20), 1)
@@ -81,7 +81,7 @@ def draw(board, screen, width):
                 continue
 
             if board[i][j] == 0 and j == 1:
-                pygame.draw.rect(screen, black, (i * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
+                pygame.draw.rect(screen, grey, (i * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
                 continue
             elif j == 1:
                 if i + 1 < 200 and board[i][j] == board[i + 1][j]:
@@ -90,7 +90,7 @@ def draw(board, screen, width):
                     continue
                 pygame.draw.rect(screen, blue, (i * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
             elif board[i][j] == 0 and j == 0:
-                pygame.draw.rect(screen, black, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
+                pygame.draw.rect(screen, grey, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
             elif j == 0:
                 if i + 1 < 200 and board[i][j] == board[i + 1][j]:
                     pygame.draw.rect(screen, red, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE*2, BLOCK_SIZE))
@@ -98,7 +98,7 @@ def draw(board, screen, width):
                     continue
                 pygame.draw.rect(screen, blue, (i * BLOCK_W_SPACE + START, height[i]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
             elif board[i][j] == 0 and j == 2:
-                pygame.draw.rect(screen, black, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
+                pygame.draw.rect(screen, grey, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 continue
             elif j == 2:
                 if i + 1 < 200 and board[i][j] == board[i + 1][j]:
@@ -106,8 +106,6 @@ def draw(board, screen, width):
                     to_skip = board[i][j]
                     continue
                 pygame.draw.rect(screen, blue, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
-
-
 
 
 def find_free_id(board):

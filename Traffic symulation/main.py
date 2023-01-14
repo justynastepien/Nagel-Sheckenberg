@@ -85,7 +85,6 @@ Model.draw_grid(screen, width)
 pygame.display.flip()
 start = time.time()
 
-
 while running:
     screen.blit(bg_img,(-100,0))
     board, cars = Model.process(board, cars)
