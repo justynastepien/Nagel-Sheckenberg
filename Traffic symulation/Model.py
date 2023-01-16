@@ -1,9 +1,8 @@
 import pygame
-from datetime import datetime
-import time
 import numpy as np
-import Car
-import Bus
+from Car import Car
+from Bus import Bus
+from ModelStatistics import stats
 
 
 START = 80
@@ -129,7 +128,7 @@ def add_random_car(board, cars, screen):
     if p[0] > 0.5 and board[0][1] == 0:
         if board[1][1] == 0 and p[2] < 0.8:
             bus_id = find_free_id(board)
-            cars.append(Bus.Bus(1, bus_id, 'bus'))
+            cars.append(Bus(1, bus_id, 'bus'))
             board[0][1] = bus_id
             board[1][1] = bus_id
             #print('bus')
@@ -137,7 +136,7 @@ def add_random_car(board, cars, screen):
             flag1 = 1
         if flag1 == 0:
             car_id = find_free_id(board)
-            cars.append(Car.Car(1, car_id, 'car'))
+            cars.append(Car(1, car_id, 'car'))
             board[0][1] = car_id
             #print('car')
             pygame.draw.rect(screen, car_color, (0 * BLOCK_W_SPACE + START, height[0], BLOCK_SIZE, BLOCK_SIZE))
@@ -145,14 +144,14 @@ def add_random_car(board, cars, screen):
     if p[1] > 0.1 and board[199][0] == 0:
         if board[198][0] == 0 and p[3] < 0.6:
             bus_id = find_free_id(board)
-            cars.append(Bus.Bus(1, bus_id, 'bus'))
+            cars.append(Bus(1, bus_id, 'bus'))
             board[199][0] = bus_id
             board[198][0] = bus_id
             pygame.draw.rect(screen, red, (198 * BLOCK_W_SPACE + START, height[198]-BLOCK_W_SPACE, BLOCK_SIZE*2, BLOCK_SIZE))
             flag2 = 1
         if flag2 == 0:
             car_id = find_free_id(board)
-            cars.append(Car.Car(1, car_id, 'car'))
+            cars.append(Car(1, car_id, 'car'))
             board[199][0] = car_id
             pygame.draw.rect(screen, car_color, (199 * BLOCK_W_SPACE + START, height[199]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
     return board, cars
@@ -251,6 +250,7 @@ def process(board, cars):
             car = find_car(car_id, cars)
 
             vel = car.v
+            car.time += 1
 
             # if j == 1 and car.vehicle_type == 'car':
             #     behind_car, p = find_car_before(board, i, j, car.vehicle_type)
@@ -265,7 +265,7 @@ def process(board, cars):
                     t = 2
 
             if j == 2:
-                print([car_id, board[i][j - 1] == 0, board[i + 1][j - 1] == 0, board[i+1][j] == 1001])
+                # print([car_id, board[i][j - 1] == 0, board[i + 1][j - 1] == 0, board[i+1][j] == 1001])
                 if car.vehicle_type == 'bus' and board[i][j - 1] == 0 and board[i + 1][j - 1] == 0 and board[i+2][j] == 1001 and i < 198:
                     t = 1
                 elif car.vehicle_type == 'car' and board[i][j-1] == 0 and board[i+1][j] == 1001:
@@ -344,8 +344,15 @@ def process(board, cars):
                         new_board[i + 1 - new_vel][j] = car.id
                 else:
                     cars_to_rmv.append(car)
-            stop =  False
+            stop = False
     for c in cars_to_rmv:
         cars.remove(c)
+        if isinstance(c, Car):
+            stats.add_car(c.time)
+        elif isinstance(c, Bus):
+            stats.add_bus(c.time)
+        
+    print("\ncar avg pass time:", stats.get_avg_car(), "(", stats.total_cars, ")")
+    print("bus avg pass time:", stats.get_avg_bus(), "(", stats.total_buses, ")")
 
     return new_board, cars
