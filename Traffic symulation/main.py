@@ -25,7 +25,7 @@ class Application():
         pygame.display.set_caption("Nagel-Schreckenberg Simulation")
         self.bg_img = pygame.image.load('agh.png')
         self.bg_img = pygame.transform.scale(self.bg_img,(1950,650))
-        self.updateTime = 0
+        self.updateTime = 0.5
 
         self.running = True
         
