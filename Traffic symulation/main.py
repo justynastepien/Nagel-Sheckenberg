@@ -12,10 +12,14 @@ black = (0, 0, 0)
 red = (255, 0, 0)
 blue = (0, 255, 0)
 
+LIGHT1_TIME_S = 40
+LIGHT2_TIME_S = 28
+
+BUSPAS = 1
 
 class Application():
-    light1 = False
-    light2 = False
+    light1 = True
+    light2 = True
 
     def __init__(self):
         (self.width, self.height) = (1800, 600)
@@ -23,39 +27,40 @@ class Application():
         pygame.display.set_caption("Nagel-Schreckenberg Simulation")
         self.bg_img = pygame.image.load('agh.png')
         self.bg_img = pygame.transform.scale(self.bg_img,(1950,650))
-        self.updateTime = 0.5
+        self.updateTime = 0
 
         self.running = True
         
-        # timers for traffic light
-        self.prevTime1 = time.perf_counter()
-        self.prevTime2 = time.perf_counter()
-        self.prevTime3 = time.perf_counter()
+        self.running_time = 0
 
         # przechowuje położenia samochów w czasie t, gdzie wartość > 0 oznacza id samochodu znajdujcy się na danym polu, 0 - brak samochodu
         self.board = np.zeros((200, 3))
         
         self.cars = []
-        self.initialize_buspas()
+        self.initialize_buspas(BUSPAS)
         self.draw_model()
         self.run()
 
     
-    def initialize_buspas(self):
-        for i in range(21):
-            self.board[i][2] = 1001
+    def initialize_buspas(self, buspas=True):
+        if buspas:
+            for i in range(21):
+                self.board[i][2] = 10001
 
-        for i in range(40, 44):
-            self.board[i][2] = 1001
+            for i in range(40, 44):
+                self.board[i][2] = 10001
 
-        for i in range(74, 114):
-            self.board[i][2] = 1001
+            for i in range(74, 114):
+                self.board[i][2] = 10001
 
-        for i in range(160, 165):
-            self.board[i][2] = 1001
+            for i in range(160, 165):
+                self.board[i][2] = 10001
 
-        for i in range(190, 200):
-            self.board[i][2] = 1001
+            for i in range(190, 200):
+                self.board[i][2] = 10001
+        else:
+            for i in range(200):
+                self.board[i][2] = 10001
 
     def draw_model(self):
         Model.draw_grid(self.screen, self.width)
@@ -74,15 +79,11 @@ class Application():
 
 
     def manage_traffic_light(self):
-        checkTime1 = time.perf_counter()
-        if checkTime1 - self.prevTime1 > 10:
+        if self.running_time % LIGHT1_TIME_S/2 == 0:
             self.light1 = self.change_traffic_light(self.light1, 94)
-            self.prevTime1 = time.perf_counter()
 
-        checkTime2 = time.perf_counter()
-        if checkTime2 - self.prevTime2 > 7:
+        if self.running_time % LIGHT2_TIME_S/2 == 0:
             self.light2 = self.change_traffic_light(self.light2, 137)
-            self.prevTime2 = time.perf_counter()
 
 
     def change_traffic_light(self, light, possition) -> bool:
@@ -98,27 +99,27 @@ class Application():
         else:
             light = True
             if possition == 94:
-                self.board[94][0] = 1000
-                self.board[94][1] = 1000
+                self.board[94][0] = 10000
+                self.board[94][1] = 10000
             elif possition == 137:
-                self.board[137][0] = 1000
-                self.board[137][1] = 1000
-                self.board[137][2] = 1000
+                self.board[137][0] = 10000
+                self.board[137][1] = 10000
+                self.board[137][2] = 10000
         return light
 
 
     #TODO: rename
     def idk_waht_thisdo(self):
         if self.light1 and self.board[94][0] == 0:
-            self.board[94][0] = 1000
+            self.board[94][0] = 10000
         elif self.light1 and self.board[94][1] == 0:
-            self.board[94][1] = 1000
+            self.board[94][1] = 10000
         if self.light2 and self.board[137][0] == 0:
-            self.board[137][0] = 1000
+            self.board[137][0] = 10000
         elif self.light2 and self.board[137][1] == 0:
-            self.board[137][1] = 1000
+            self.board[137][1] = 10000
         elif self.light2 and self.board[137][2] == 0:
-            self.board[137][2] = 1000
+            self.board[137][2] = 10000
 
     
     def manage_keys(self):
@@ -157,6 +158,8 @@ class Application():
             self.manage_traffic_light()
             time.sleep(self.updateTime)
             self.manage_keys()
+
+            self.running_time += 1
 
 
 app = Application()

@@ -10,6 +10,7 @@ BLOCK_SIZE = 7
 BLOCK_W_SPACE = BLOCK_SIZE+1
 FREE_LANE = 201
 MAX_SPEED = 4
+INCREASED_SPEED = 0
 
 free = 0
 
@@ -60,15 +61,15 @@ def draw(board, screen, width):
             if board[i][j] == to_skip:
                 continue
 
-            if board[i][j] == 1001:
+            if board[i][j] == 10001:
                 pygame.draw.rect(screen, white, (i * BLOCK_W_SPACE + START, height[i]+BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
                 continue
-            if board[i][j] == 1002:
+            if board[i][j] == 10002:
                 pygame.draw.rect(screen, white, (i * BLOCK_W_SPACE + START, height[i]+20, BLOCK_SIZE, BLOCK_SIZE))
                 continue
 
 
-            if board[i][j] == 1000:
+            if board[i][j] == 10000:
                 if j == 1 and i == 94:
                     pygame.draw.rect(screen, light_color, (94 * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
                 elif j == 0 and i == 94:
@@ -116,7 +117,7 @@ def draw(board, screen, width):
 def find_free_id(board):
     global free
     free += 1
-    if free == 1000 or free == 1001 or free == 1002 or free == FREE_LANE:
+    if free == 10000 or free == 10001 or free == 10002 or free == FREE_LANE:
         free += 1
     return free
 
@@ -125,8 +126,8 @@ def add_random_car(board, cars, screen):
     p = np.random.rand(4)
     flag1 = 0
     flag2 = 0
-    if p[0] > 0.5 and board[0][1] == 0:
-        if board[1][1] == 0 and p[2] < 0.8:
+    if p[0] > 0.2 and board[0][1] == 0:
+        if board[1][1] == 0 and p[2] < 0.2:
             bus_id = find_free_id(board)
             cars.append(Bus(1, bus_id, 'bus'))
             board[0][1] = bus_id
@@ -141,8 +142,8 @@ def add_random_car(board, cars, screen):
             #print('car')
             pygame.draw.rect(screen, car_color, (0 * BLOCK_W_SPACE + START, height[0], BLOCK_SIZE, BLOCK_SIZE))
 
-    if p[1] > 0.1 and board[199][0] == 0:
-        if board[198][0] == 0 and p[3] < 0.6:
+    if p[1] > 0.2 and board[199][0] == 0:
+        if board[198][0] == 0 and p[3] < 0.2:
             bus_id = find_free_id(board)
             cars.append(Bus(1, bus_id, 'bus'))
             board[199][0] = bus_id
@@ -198,18 +199,18 @@ def find_next_car(board, i, j):
 
 def find_car_before(board, i, j, v_type):
     p = j + 1
-    if board[i][j + 1] == 1001:
+    if board[i][j + 1] == 10001:
         return -1, -1
     if v_type == 'car':
         for k in range(i, -1, -1):
-            if board[k][p] == 1001:
+            if board[k][p] == 10001:
                 return FREE_LANE, FREE_LANE
             if not board[k][j] == 0:
                 next_car = board[k][j]
                 return next_car, k
     elif v_type == 'bus':
         for k in range(i+1, -1, -1):
-            if board[k][p] == 1001:
+            if board[k][p] == 10001:
                 return FREE_LANE, FREE_LANE
             if not board[k][j] == 0:
                 next_car = board[k][j]
@@ -232,14 +233,14 @@ def process(board, cars):
 
     for j in range(board.shape[1]):
         for i in range(board.shape[0]):
-            if board[i][j] == 1000:
-                new_board[i][j] = 1000
+            if board[i][j] == 10000:
+                new_board[i][j] = 10000
                 continue
-            if board[i][j] == 1001:
-                new_board[i][j] = 1001
+            if board[i][j] == 10001:
+                new_board[i][j] = 10001
                 continue
-            if board[i][j] == 1002:
-                new_board[i][j] = 1002
+            if board[i][j] == 10002:
+                new_board[i][j] = 10002
                 continue
             if board[i][j] == 0:
                 continue
@@ -261,14 +262,14 @@ def process(board, cars):
             #                 t = 2
 
             if j == 1 and car.vehicle_type == 'bus':
-                if board[i][j+1] == 0 and board[i+1][j+1] == 0 and board[i+2][j+1] != 1001:
+                if board[i][j+1] == 0 and board[i+1][j+1] == 0 and board[i+2][j+1] != 10001:
                     t = 2
 
             if j == 2:
-                # print([car_id, board[i][j - 1] == 0, board[i + 1][j - 1] == 0, board[i+1][j] == 1001])
-                if car.vehicle_type == 'bus' and board[i][j - 1] == 0 and board[i + 1][j - 1] == 0 and board[i+2][j] == 1001 and i < 198:
+                # print([car_id, board[i][j - 1] == 0, board[i + 1][j - 1] == 0, board[i+1][j] == 10001])
+                if car.vehicle_type == 'bus' and board[i][j - 1] == 0 and board[i + 1][j - 1] == 0 and board[i+2][j] == 10001 and i < 198:
                     t = 1
-                elif car.vehicle_type == 'car' and board[i][j-1] == 0 and board[i+1][j] == 1001:
+                elif car.vehicle_type == 'car' and board[i][j-1] == 0 and board[i+1][j] == 10001:
                     t = 1
 
             next_car, k = 0, 0
@@ -297,10 +298,12 @@ def process(board, cars):
 
                 if distance < 0:
                     distance = 0
-                if distance > vel:
+                if distance > vel + INCREASED_SPEED:
+                    new_vel = vel + 1 + INCREASED_SPEED
+                elif distance > vel:
                     new_vel = vel + 1
                 elif distance < vel:
-                    new_vel = distance - 1  #funkcja hamowania
+                    new_vel = distance - 1 - INCREASED_SPEED  #funkcja hamowania
                     if distance == 1:
                         new_vel = 1
                         if car.vehicle_type == 'bus':
@@ -310,7 +313,7 @@ def process(board, cars):
                 else:
                     new_vel = vel
             if j == 1 and i < 197:
-                if car.vehicle_type == 'car' and board[i+3][j+1] == 1001 and board[i+1][j+1] != 0 and board[i+2][j+1] != 1001 and board[i+2][j+1] != 0 and board[i+1][j+1] != 1001:
+                if car.vehicle_type == 'car' and board[i+3][j+1] == 10001 and board[i+1][j+1] != 0 and board[i+2][j+1] != 10001 and board[i+2][j+1] != 0 and board[i+1][j+1] != 10001:
                     new_vel = 0
 
             if car.vehicle_type == 'bus' and new_vel > 0 and (i<23 and i > 14):
@@ -347,10 +350,11 @@ def process(board, cars):
             stop = False
     for c in cars_to_rmv:
         cars.remove(c)
-        if isinstance(c, Car):
-            stats.add_car(c.time)
-        elif isinstance(c, Bus):
-            stats.add_bus(c.time)
+        if stats.can_add():
+            if isinstance(c, Car):
+                stats.add_car(c.time)
+            elif isinstance(c, Bus):
+                stats.add_bus(c.time)
         
     print("\ncar avg pass time:", stats.get_avg_car(), "(", stats.total_cars, ")")
     print("bus avg pass time:", stats.get_avg_bus(), "(", stats.total_buses, ")")
