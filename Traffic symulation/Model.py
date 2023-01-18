@@ -12,6 +12,8 @@ FREE_LANE = 201
 MAX_SPEED = 4
 INCREASED_SPEED = 0
 
+BUSPAS = 1
+
 free = 0
 
 white = (255, 255, 255)
@@ -251,6 +253,13 @@ def process(board, cars):
             car = find_car(car_id, cars)
 
             vel = car.v
+
+            if not BUSPAS:
+                r = np.random.rand(1)
+                if j == 1 and car.vehicle_type == 'car' and r[0] <= 0.2:
+                    if board[i][j+1] == 0 and board[i+1][j+1] == 0 and board[i+2][j+1] != 1001:
+                        t = 2
+
             car.time += 1
 
             # if j == 1 and car.vehicle_type == 'car':

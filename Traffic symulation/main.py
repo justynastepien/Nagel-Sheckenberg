@@ -15,8 +15,6 @@ blue = (0, 255, 0)
 LIGHT1_TIME_S = 40
 LIGHT2_TIME_S = 28
 
-BUSPAS = 1
-
 class Application():
     light1 = True
     light2 = True
@@ -37,30 +35,27 @@ class Application():
         self.board = np.zeros((200, 3))
         
         self.cars = []
-        self.initialize_buspas(BUSPAS)
+        self.initialize_buspas()
         self.draw_model()
         self.run()
 
     
-    def initialize_buspas(self, buspas=True):
-        if buspas:
-            for i in range(21):
-                self.board[i][2] = 10001
+    def initialize_buspas(self):
+        for i in range(21):
+            self.board[i][2] = 10001
 
-            for i in range(40, 44):
-                self.board[i][2] = 10001
+        for i in range(40, 44):
+            self.board[i][2] = 10001
 
-            for i in range(74, 114):
-                self.board[i][2] = 10001
+        for i in range(74, 114):
+            self.board[i][2] = 10001
 
-            for i in range(160, 165):
-                self.board[i][2] = 10001
+        for i in range(160, 165):
+            self.board[i][2] = 10001
 
-            for i in range(190, 200):
-                self.board[i][2] = 10001
-        else:
-            for i in range(200):
-                self.board[i][2] = 10001
+        for i in range(190, 200):
+            self.board[i][2] = 10001
+
 
     def draw_model(self):
         Model.draw_grid(self.screen, self.width)
