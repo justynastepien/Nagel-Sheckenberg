@@ -1,4 +1,4 @@
-class ModelStatistics():
+class ModelStatistics:
     def __init__(self):
         self.total_cars = 0
         self.total_buses = 0
@@ -29,5 +29,6 @@ class ModelStatistics():
         if self.total_buses == 0:
             return 0
         return self.time_buses/self.total_buses
+
 
 stats = ModelStatistics()

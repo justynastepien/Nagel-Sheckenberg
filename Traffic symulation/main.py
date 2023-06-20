@@ -15,7 +15,8 @@ blue = (0, 255, 0)
 LIGHT1_TIME_S = 40
 LIGHT2_TIME_S = 28
 
-class Application():
+
+class Application:
     light1 = True
     light2 = True
 
@@ -24,7 +25,7 @@ class Application():
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Nagel-Schreckenberg Simulation")
         self.bg_img = pygame.image.load('agh.png')
-        self.bg_img = pygame.transform.scale(self.bg_img,(1950,650))
+        self.bg_img = pygame.transform.scale(self.bg_img, (1950, 650))
         self.updateTime = 0.5
 
         self.running = True
@@ -35,12 +36,11 @@ class Application():
         self.board = np.zeros((200, 3))
         
         self.cars = []
-        self.initialize_buspas()
+        self.initialize_busline()
         self.draw_model()
         self.run()
 
-    
-    def initialize_buspas(self):
+    def initialize_busline(self):
         for i in range(21):
             self.board[i][2] = 10001
 
@@ -56,12 +56,10 @@ class Application():
         for i in range(190, 200):
             self.board[i][2] = 10001
 
-
     def draw_model(self):
         Model.draw_grid(self.screen, self.width)
         pygame.display.flip()
         start = time.time()
-
 
     def show_board(self):
         stri = '#'
@@ -72,7 +70,6 @@ class Application():
                     print(stri)
                     stri = '#'
 
-
     def manage_traffic_light(self):
         if self.running_time % LIGHT1_TIME_S/2 == 0:
             self.light1 = self.change_traffic_light(self.light1, 94)
@@ -80,42 +77,26 @@ class Application():
         if self.running_time % LIGHT2_TIME_S/2 == 0:
             self.light2 = self.change_traffic_light(self.light2, 137)
 
-
-    def change_traffic_light(self, light, possition) -> bool:
+    def change_traffic_light(self, light, position) -> bool:
         if light:
             light = False
-            if possition == 94:
+            if position == 94:
                 self.board[94][0] = 0
                 self.board[94][1] = 0
-            elif possition == 137:
+            elif position == 137:
                 self.board[137][0] = 0
                 self.board[137][1] = 0
                 self.board[137][2] = 0
         else:
             light = True
-            if possition == 94:
+            if position == 94:
                 self.board[94][0] = 10000
                 self.board[94][1] = 10000
-            elif possition == 137:
+            elif position == 137:
                 self.board[137][0] = 10000
                 self.board[137][1] = 10000
                 self.board[137][2] = 10000
         return light
-
-
-    #TODO: rename
-    def idk_waht_thisdo(self):
-        if self.light1 and self.board[94][0] == 0:
-            self.board[94][0] = 10000
-        elif self.light1 and self.board[94][1] == 0:
-            self.board[94][1] = 10000
-        if self.light2 and self.board[137][0] == 0:
-            self.board[137][0] = 10000
-        elif self.light2 and self.board[137][1] == 0:
-            self.board[137][1] = 10000
-        elif self.light2 and self.board[137][2] == 0:
-            self.board[137][2] = 10000
-
     
     def manage_keys(self):
         for event in pygame.event.get():
@@ -144,8 +125,6 @@ class Application():
             self.screen.blit(self.bg_img,(-100,0))
             self.board, self.cars = Model.process(self.board, self.cars)
             self.board, self.cars = Model.add_random_car(self.board, self.cars, self.screen)
-            
-            self.idk_waht_thisdo()
 
             Model.draw(self.board, self.screen, self.width)
             pygame.display.flip()

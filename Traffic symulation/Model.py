@@ -70,7 +70,6 @@ def draw(board, screen, width):
                 pygame.draw.rect(screen, white, (i * BLOCK_W_SPACE + START, height[i]+20, BLOCK_SIZE, BLOCK_SIZE))
                 continue
 
-
             if board[i][j] == 10000:
                 if j == 1 and i == 94:
                     pygame.draw.rect(screen, light_color, (94 * BLOCK_W_SPACE + START, height[i], BLOCK_SIZE, BLOCK_SIZE))
@@ -120,7 +119,7 @@ def find_free_id(board):
     global free
     free += 1
     if free == 10000 or free == 10001 or free == 10002 or free == FREE_LANE:
-        free += 1
+        free = 10003,
     return free
 
 
@@ -159,10 +158,12 @@ def add_random_car(board, cars, screen):
             pygame.draw.rect(screen, car_color, (199 * BLOCK_W_SPACE + START, height[199]-BLOCK_W_SPACE, BLOCK_SIZE, BLOCK_SIZE))
     return board, cars
 
+
 def find_car(id, cars):
     for c in cars:
         if c.id == id:
             return c
+
 
 def change_line(behind_car, p, i, j):
     r = np.random.rand(2)
@@ -275,8 +276,8 @@ def process(board, cars):
                     t = 2
 
             if j == 2:
-                # print([car_id, board[i][j - 1] == 0, board[i + 1][j - 1] == 0, board[i+1][j] == 10001])
-                if car.vehicle_type == 'bus' and board[i][j - 1] == 0 and board[i + 1][j - 1] == 0 and board[i+2][j] == 10001 and i < 198:
+                if car.vehicle_type == 'bus' and board[i][j - 1] == 0 and board[i + 1][j - 1] == 0 \
+                        and board[i+2][j] == 10001 and i < 198:
                     t = 1
                 elif car.vehicle_type == 'car' and board[i][j-1] == 0 and board[i+1][j] == 10001:
                     t = 1
@@ -322,12 +323,13 @@ def process(board, cars):
                 else:
                     new_vel = vel
             if j == 1 and i < 197:
-                if car.vehicle_type == 'car' and board[i+3][j+1] == 10001 and board[i+1][j+1] != 0 and board[i+2][j+1] != 10001 and board[i+2][j+1] != 0 and board[i+1][j+1] != 10001:
+                if car.vehicle_type == 'car' and board[i+3][j+1] == 10001 and board[i+1][j+1] != 0 and board[i+2][j+1] \
+                        != 10001 and board[i+2][j+1] != 0 and board[i+1][j+1] != 10001:
                     new_vel = 0
 
-            if car.vehicle_type == 'bus' and new_vel > 0 and (i<23 and i > 14):
+            if car.vehicle_type == 'bus' and new_vel > 0 and (23 > i > 14):
                 new_vel = 1
-            if car.vehicle_type == 'bus' and j == 2 and new_vel > 0 and (i<137 and i > 137):
+            if car.vehicle_type == 'bus' and j == 2 and new_vel > 0 and (i < 137 or i > 137):
                 new_vel = 1
             if t == 2 and t != j and (i < 23 or i == 136 or i == 283):
                 new_vel = 0
